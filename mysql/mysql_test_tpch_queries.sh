@@ -55,7 +55,7 @@ echo -e "LOAD DATA INFILE '$DATA_DIR/$i/lineitem.tbl' INTO TABLE lineitem_$i COL
 # Remove created sript
 rm "$HOME/mysql_tmp_population_queries.sql" &>> benchmark.log
 
-# Test the current query
+# Test the current dataset
 python $HOME/VLDB_benchmarks/mysql/mysql.py "$i" &>> benchmark.log
 
 # Shutdown the server to free memory
