@@ -64,7 +64,6 @@ cd mysql-server || return
 cmake -D MYSQL_DATADIR="$MYSQL_DIR/mysql/data/" -D SYSCONFIG="$MYSQL_DIR/mysql/etc/" -D CMAKE_INSTALL_PREFIX="$MYSQL_DIR/mysql/" -D WITH_BOOST="$BOOST_DIR/boost_1_59_0/" .
 make -j$MAKE_NUM_THREADS
 make install
-cd "$HOME" || return
 
 # Download dstat
 cd "$LIB_DIR" || return
@@ -229,12 +228,12 @@ echo -e ");"
 echo -e "CREATE INDEX idx_${i}_l_orderkey ON lineitem_${i} (l_orderkey);"
 echo -e "CREATE INDEX idx_${i}_l_partkey ON lineitem_${i} (l_partkey);"
 echo -e "CREATE INDEX idx_${i}_l_suppkey ON lineitem_${i} (l_suppkey);"
-} > "$HOME/mysql_tmp_create_tables.sql"
+} > "mysql_tmp_create_tables.sql"
 
-"$MYSQL_DIR/mysql/bin/mysql" --defaults-file="$MY_CNF" -u "root" "-proot" laolap < "$HOME/mysql_tmp_create_tables.sql"
+"$MYSQL_DIR/mysql/bin/mysql" --defaults-file="$MY_CNF" -u "root" "-proot" laolap < "mysql_tmp_create_tables.sql"
 done
 
-rm "$HOME/mysql_tmp_create_tables.sql"
+rm "mysql_tmp_create_tables.sql"
 
 # Shutdown the server
 "$MYSQL_DIR/mysql/bin/mysqladmin" --defaults-file="$MY_CNF" -u "root" "-proot" shutdown

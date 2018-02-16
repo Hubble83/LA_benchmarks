@@ -19,6 +19,9 @@ export MY_CNF=$MYSQL_DIR/mysql/my.cnf
 # Specify data dir
 export DATA_DIR=/share/jade/laolap_data
 
+# Specify git clone directory
+export REPO_DIR=$HOME
+
 ################################################################################
 
 mkdir -p "results_mysql"
@@ -47,16 +50,16 @@ echo -e "LOAD DATA INFILE '$DATA_DIR/$i/partsupp.tbl' INTO TABLE partsupp_$i COL
 echo -e "LOAD DATA INFILE '$DATA_DIR/$i/customer.tbl' INTO TABLE customer_$i COLUMNS TERMINATED BY '|';"
 echo -e "LOAD DATA INFILE '$DATA_DIR/$i/orders.tbl' INTO TABLE orders_$i COLUMNS TERMINATED BY '|';"
 echo -e "LOAD DATA INFILE '$DATA_DIR/$i/lineitem.tbl' INTO TABLE lineitem_$i COLUMNS TERMINATED BY '|';"
-} > "$HOME/mysql_tmp_population_queries.sql"
+} > mysql_tmp_population_queries.sql
 
 # Load data
-"$MYSQL_DIR/mysql/bin/mysql" --defaults-file="$MY_CNF" -u "root" "-proot" laolap < "$HOME/mysql_tmp_population_queries.sql" &>> benchmark.log
+"$MYSQL_DIR/mysql/bin/mysql" --defaults-file="$MY_CNF" -u "root" "-proot" laolap < mysql_tmp_population_queries.sql &>> benchmark.log
 
 # Remove created sript
-rm "$HOME/mysql_tmp_population_queries.sql" &>> benchmark.log
+rm mysql_tmp_population_queries.sql &>> benchmark.log
 
 # Test the current dataset
-python $HOME/VLDB_benchmarks/mysql/mysql.py "$i" &>> benchmark.log
+python "$REPO_DIR/VLDB_benchmarks/mysql/mysql.py" "$i" &>> benchmark.log
 
 # Shutdown the server to free memory
 "$MYSQL_DIR/mysql/bin/mysqladmin" --defaults-file="$MY_CNF" -u "root" "-proot" shutdown &>> benchmark.log

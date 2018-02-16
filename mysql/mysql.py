@@ -78,6 +78,7 @@ def main(argv):
       mem_out_list=[]
       with open("mysql_memory_usage.csv", "r") as mem_info:
         mem_out_list = mem_info.readlines()[7:-1]
+      os.remove("mysql_memory_usage.csv")
 
       # calculate max memory usage
       memory.append(
