@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#PBS -N query_03_MYSQL
+#PBS -N MYSQL_BENCHMARK
 #PBS -l walltime=24:00:00
 #PBS -l nodes=compute-781-1:ppn=64
 #PBS -m abe

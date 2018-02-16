@@ -28,7 +28,7 @@ def sdev(mean, values):
   return avg(map(lambda x: (x-mean)**2, values))**(0.5)
 
 def main(argv):
-  
+
   data_size = argv[1]
 
   MYSQL_DIR=os.environ["MYSQL_DIR"]
@@ -47,9 +47,9 @@ def main(argv):
     memory = []
 
     for i in range(10):
-      
+
       dstat = subprocess.Popen(
-        [DSTAT_DIR+"/dstat", "-m", "--noheaders", "--noupdate", "--nocolor"],
+        [DSTAT_DIR+"/dstat", "-m", "--noheaders", "--noupdate", "--nocolor", "--output", "mysql_memory_usage.csv"],
         stdout=subprocess.PIPE
       )
       time.sleep(2)
@@ -75,12 +75,13 @@ def main(argv):
       dstat.terminate()
 
       # get profiler results_mysql
-      mem_out, _ = dstat.communicate()
-      mem_out_list = mem_out.splitlines()[3:-1]
+      mem_out_list=[]
+      with open("mysql_memory_usage.csv", "r") as mem_info:
+        mem_out_list = mem_info.readlines()[7:-1]
 
       # calculate max memory usage
       memory.append(
-        max(map( lambda x: float(x.split("G")[0]), mem_out_list ))
+        max(map( lambda x: float(x.split(',')[0]), mem_out_list ))
       )
 
       # calculate execution time
@@ -92,7 +93,7 @@ def main(argv):
       exec_time.append( t_acc )
 
 
-    # aggregate data from multiple runs storing the k-best, average and standard deviation 
+    # aggregate data from multiple runs storing the k-best, average and standard deviation
     with open("results_mysql/query_{0}_time.csv".format(num), "a") as csv_time:
       kb = round( kbest(3,exec_time), 6)
       av = round( avg(exec_time), 6)
