@@ -12,6 +12,9 @@ export LIB_DIR=$HOME/new_libs
 # Specify number of threads used by make
 export MAKE_NUM_THREADS=64
 
+# Specify total RAM in GB
+export RAM_SIZE=256
+
 # Add m4 to PATH
 PATH=$PATH:/usr/bin/m4
 
@@ -93,7 +96,7 @@ git clone https://github.com/dagwieers/dstat.git
 	echo -e "disable_partition_engine_check = true"
 	echo -e "pid-file = $MYSQL_DIR/mysql/mysql.pid"
 	echo -e "secure-file-priv = \"\""
-	echo -e "max_heap_table_size=250G"
+	echo -e "max_heap_table_size=$((RAM_SIZE * 98 / 100))G"
 	echo -e "skip_log_bin"
 	echo -e "query_cache_type = 0"
 	echo -e "query_cache_size = 0"

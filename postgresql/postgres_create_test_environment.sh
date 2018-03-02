@@ -12,6 +12,9 @@ export LIB_DIR=$HOME/new_libs
 # Specify number of threads used by make
 export MAKE_NUM_THREADS=64
 
+# Specify total RAM in GB
+export RAM_SIZE=256
+
 # Specify lib subdirectories
 export READLINE_DIR=$LIB_DIR/readline
 export PG_DIR=$LIB_DIR/postgresql
@@ -67,8 +70,8 @@ sleep 5
 "$PG_DIR/postgresql/bin/createdb" laolap -O laolap -U laolap -w -e
 
 # Config PostgreSQL
-"$PG_DIR/postgresql/bin/psql" laolap -U laolap -c "ALTER SYSTEM SET shared_buffers TO '192GB';" # 3/4 256
-"$PG_DIR/postgresql/bin/psql" laolap -U laolap -c "ALTER SYSTEM SET effective_cache_size TO '224GB';" # 256 - 32(offset)
+"$PG_DIR/postgresql/bin/psql" laolap -U laolap -c "ALTER SYSTEM SET shared_buffers TO '$((RAM_SIZE * 3 / 4))GB';"
+"$PG_DIR/postgresql/bin/psql" laolap -U laolap -c "ALTER SYSTEM SET effective_cache_size TO '$((RAM_SIZE * 7 / 8))GB';"
 
 # restart server to apply configs
 "$PG_DIR/postgresql/bin/pg_ctl" -D "$PG_DIR/postgresql/pgdata" -l "$PG_DIR/postgresql/postgresql.log" restart
