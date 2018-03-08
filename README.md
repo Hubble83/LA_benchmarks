@@ -2,18 +2,8 @@
 
 This repository contains the necessary scripts to recreate all the benchmarks presented in the paper.
 
-_Note: Edit predifined variables in the top of each script to fit the ones in your system_
+It was not designed to work in every system. Please use it as a guide if any of the called scripts does not work properly.
 
-## MySQL
+Please edit predefined variables in the top of the *test_all.sh* script to fit the ones in your system.
 
- **mysql_create_test_environment.sh** - used to install and configure MySQL, create tables and generate TPC-H data.
-
- **mysql_test_tpch_queries.sh** - used to test all mysql queries (expects a valid test environment to be created)
- + Estimated time: 6 hours
-
-## PostgreSQL
-
- **postgres_create_test_environment.sh** - used to install and configure PostgreSQL, create tables and load data.
- + Estimated time: 48 hours
-
-## Linear Algebra approach
+Since the installation, configuration, and test take several hours, we advise testing a simple dataset first.

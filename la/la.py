@@ -33,14 +33,18 @@ def main(argv):
 
   QUERIES_DIR=os.environ["QUERIES_DIR"]
   DSTAT_DIR=os.environ["DSTAT_DIR"]
+  QUERIES_STRING=os.environ["QUERIES_STRING"]
 
-  for q in queries:
-    with open("results_la/query_{0}_time.csv".format(q), "a") as csv_time:
+  queries_keys = QUERIES_STRING.split(",")
+
+  for num in queries_keys:
+    with open("results_la/query_{0}_time.csv".format(num), "a") as csv_time:
       csv_time.write(data_size)
-    with open("results_la/query_{0}_memory.csv".format(q), "a") as csv_memory:
+    with open("results_la/query_{0}_memory.csv".format(num), "a") as csv_memory:
       csv_memory.write(data_size)
 
-  for num, query in queries.iteritems():
+  for num in queries_keys:
+    query = queries[num]
 
     exec_time = []
     memory = []
@@ -104,8 +108,8 @@ def main(argv):
       csv_memory.write( ",{0},{1},{2}\n".format(kb, av, sd) )
 
 queries = {
-  "3": "query_3_v2_seq",
-  "4": "query_4_v2",
+  "3": "query_3_seq",
+  "4": "query_4",
   "6": "query_6_seq",
   "11": "query_11",
   "12": "query_12",
