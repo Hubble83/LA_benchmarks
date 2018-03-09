@@ -15,7 +15,7 @@ DATA_DIR="$LIB_DIR/data"
 
 function get_scales() {
     # Specify datasets to test (TPC-H scale factors)
-    SF=(1 2) # 2 4 8 16 32 64
+    SF=(0.01) # 2 4 8 16 32 64
 }
 
 function get_queries() {
@@ -32,9 +32,6 @@ export MAKE_NUM_THREADS=64
 # Specify total RAM in GB
 export RAM_SIZE=256
 
-# Add m4 to PATH
-PATH=$PATH:/usr/bin/m4
-
 
 ###############################################################################
 
@@ -45,7 +42,7 @@ export -f get_queries
 export DSTAT_DIR=$LIB_DIR/dstat
 export LA_DATA_DIR="$DATA_DIR/la"
 export DBGEN_DATA_DIR="$DATA_DIR/dbgen"
-mkdir -p "$DATA_DIR $LA_DATA_DIR $DBGEN_DATA_DIR" || exit
+mkdir -p "$DATA_DIR" "$LA_DATA_DIR" "$DBGEN_DATA_DIR" || exit
 
 export BOOST_DIR=$LIB_DIR/boost
 export BISON_DIR=$LIB_DIR/bison
@@ -53,7 +50,7 @@ export MYSQL_DIR=$LIB_DIR/mysql
 export PG_DIR=$LIB_DIR/postgresql
 export DSTAT_DIR=$LIB_DIR/dstat
 export READLINE_DIR=$LIB_DIR/readline
-mkdir -p "$BOOST_DIR $BISON_DIR $MYSQL_DIR $PG_DIR $DSTAT_DIR $READLINE_DIR" || exit
+mkdir -p "$BOOST_DIR" "$BISON_DIR" "$MYSQL_DIR" "$PG_DIR" "$DSTAT_DIR" "$READLINE_DIR" || exit
 
 export MY_CNF="$MYSQL_DIR/mysql/my.cnf"
 export QUERIES_DIR="$REPO_DIR/la/bin"
@@ -77,25 +74,19 @@ done
 
 cd - || exit
 
-declare -A tables
-tables["customer"]=8
-tables["lineitem"]=16
-tables["nation"]=4
-tables["orders"]=9
-tables["partsupp"]=5
-tables["part"]=9
-tables["region"]=3
-tables["supplier"]=7
+tables=("customer" "lineitem" "nation" "orders" "partsupp" "part" "region" "supplier")
+counts=(8 16 4 9 5 9 3 7)
 
 for i in "${SF[@]}"
 do
-    for j in "${!tables[@]}"
+    for j in {0..7}
     do
-        mkdir -p "$LA_DATA_DIR/${i}/${j}_cols/" || exit
-        for (( k=1; k<=${tables[$j]}; ++k ))
+        mkdir -p "$LA_DATA_DIR/${i}/${tables[j]}_cols/" || exit
+        echo ${counts[j]}
+        for (( k=1; k<=${counts[j]}; ++k ))
         do
-            echo "Scale factor: ${i}; table ${j}; column ${k}"
-            gawk -F '|' -v c=$k '{ print $c }' "$DBGEN_DATA_DIR/$i/${j}.tbl" > "$LA_DATA_DIR/$i/${j}_cols/${j}_${k}.tbl"
+            echo "Scale factor: ${i}; table ${tables[j]}; column ${k}"
+            gawk -F '|' -v c=$k '{ print $c }' "$DBGEN_DATA_DIR/$i/${tables[j]}.tbl" > "$LA_DATA_DIR/$i/${tables[j]}_cols/${j}_${k}.tbl"
         done
     done
 done
@@ -106,8 +97,8 @@ make "-j${MAKE_NUM_THREADS}" || exit
 cd - || exit
 
 sh "$REPO_DIR/mysql/mysql_create_test_environment.sh"
-sh "$REPO_DIR/postgresql/postgres_create_test_environment.sh"
+#sh "$REPO_DIR/postgresql/postgres_create_test_environment.sh"
 
-sh "$REPO_DIR/la/la_test_tpch_queries.sh"
-sh "$REPO_DIR/mysql/mysql_test_tpch_queries.sh"
-sh "$REPO_DIR/postgresql/postgres_test_tpch_queries.sh"
+#sh "$REPO_DIR/la/la_test_tpch_queries.sh"
+#sh "$REPO_DIR/mysql/mysql_test_tpch_queries.sh"
+#sh "$REPO_DIR/postgresql/postgres_test_tpch_queries.sh"

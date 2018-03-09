@@ -2,7 +2,7 @@
 
 # Download Boost
 cd "$BOOST_DIR" || exit
-wget --no-check-certificate https://sourceforge.net/projects/boost/files/boost/1.59.0/boost_1_59_0.tar.gz/download
+wget --no-check-certificate https://sourceforge.net/projects/boost/files/boost/1.59.0/boost_1_59_0.tar.gz
 tar -zxvf boost_1_59_0.tar.gz
 rm boost_1_59_0.tar.gz
 
@@ -24,6 +24,8 @@ mkdir -p "$MYSQL_DIR/mysql/etc"
 mkdir -p "$MYSQL_DIR/mysql/log"
 mkdir -p "$MYSQL_DIR/mysql/tmp"
 cd "$MYSQL_DIR/src" || exit
+
+
 git clone https://github.com/mysql/mysql-server.git
 cd mysql-server || exit
 cmake -D MYSQL_DATADIR="$MYSQL_DIR/mysql/data/" -D SYSCONFIG="$MYSQL_DIR/mysql/etc/" -D CMAKE_INSTALL_PREFIX="$MYSQL_DIR/mysql/" -D WITH_BOOST="$BOOST_DIR/boost_1_59_0/" .
