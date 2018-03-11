@@ -1,4 +1,4 @@
-# VLDB_benchmarks
+# LA_benchmarks
 
 This repository contains the necessary scripts to recreate all the benchmarks presented in the paper.
 

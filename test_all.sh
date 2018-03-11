@@ -15,16 +15,16 @@ DATA_DIR="$LIB_DIR/data"
 
 function get_scales() {
     # Specify datasets to test (TPC-H scale factors)
-    SF=(0.01) # 2 4 8 16 32 64
+    SF=(1) # 2 4 8 16 32 64
 }
 
 function get_queries() {
     # Specify queries to test
-    QUERIES=(4 6 11) #(3 4 6 11 12 14)
+    QUERIES=(3 4 6 11 12 14)
 }
 
 # Specify path to dbgen
-DBGEN_DIR="$HOME/PI/tpch_2_17_0/dbgen"
+DBGEN_DIR="$HOME/tpch_2_17_0/dbgen"
 
 # Specify number of threads used by make
 export MAKE_NUM_THREADS=64
@@ -91,14 +91,17 @@ do
     done
 done
 
+"$REPO_DIR/libs/readline.sh"
+"$REPO_DIR/libs/boost.sh"
+"$REPO_DIR/libs/bison.sh"
 
 cd "$REPO_DIR/la" || exit
 make "-j${MAKE_NUM_THREADS}" || exit
 cd - || exit
 
-sh "$REPO_DIR/mysql/mysql_create_test_environment.sh"
-#sh "$REPO_DIR/postgresql/postgres_create_test_environment.sh"
+"$REPO_DIR/postgresql/postgres_create_test_environment.sh"
+"$REPO_DIR/mysql/mysql_create_test_environment.sh"
 
-#sh "$REPO_DIR/la/la_test_tpch_queries.sh"
-#sh "$REPO_DIR/mysql/mysql_test_tpch_queries.sh"
-#sh "$REPO_DIR/postgresql/postgres_test_tpch_queries.sh"
+"$REPO_DIR/la/la_test_tpch_queries.sh"
+"$REPO_DIR/mysql/mysql_test_tpch_queries.sh"
+"$REPO_DIR/postgresql/postgres_test_tpch_queries.sh"

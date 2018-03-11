@@ -1,22 +1,5 @@
 #!/bin/bash
 
-# Download Boost
-cd "$BOOST_DIR" || exit
-wget --no-check-certificate https://sourceforge.net/projects/boost/files/boost/1.59.0/boost_1_59_0.tar.gz
-tar -zxvf boost_1_59_0.tar.gz
-rm boost_1_59_0.tar.gz
-
-# Download and install Bison
-mkdir -p "$BISON_DIR/src"
-cd "$BISON_DIR/src" || exit
-wget --no-check-certificate http://mirrors.up.pt/pub/gnu/bison/bison-3.0.tar.gz
-tar -zxvf bison-3.0.tar.gz
-rm bison-3.0.tar.gz
-cd bison-3.0/ || exit
-./configure --prefix "$BISON_DIR/bison"
-make "-j${MAKE_NUM_THREADS}"
-make install
-
 # Download and install MySQL
 mkdir -p "$MYSQL_DIR/src"
 mkdir -p "$MYSQL_DIR/mysql/data"
@@ -24,10 +7,9 @@ mkdir -p "$MYSQL_DIR/mysql/etc"
 mkdir -p "$MYSQL_DIR/mysql/log"
 mkdir -p "$MYSQL_DIR/mysql/tmp"
 cd "$MYSQL_DIR/src" || exit
-
-
 git clone https://github.com/mysql/mysql-server.git
 cd mysql-server || exit
+export LD_LIBRARY_PATH="$READLINE_DIR/readline:$READLINE_DIR/readline/lib:$READLINE_DIR/readline/bin:$LD_LIBRARY_PATH"
 cmake -D MYSQL_DATADIR="$MYSQL_DIR/mysql/data/" -D SYSCONFIG="$MYSQL_DIR/mysql/etc/" -D CMAKE_INSTALL_PREFIX="$MYSQL_DIR/mysql/" -D WITH_BOOST="$BOOST_DIR/boost_1_59_0/" .
 make "-j${MAKE_NUM_THREADS}"
 make install
