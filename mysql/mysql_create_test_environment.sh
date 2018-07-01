@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 # Download and install MySQL
 mkdir -p "$MYSQL_DIR/src"

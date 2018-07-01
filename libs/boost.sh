@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 # Download Boost
 cd "$BOOST_DIR" || exit

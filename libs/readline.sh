@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 # Download and install readline
 mkdir -p "$READLINE_DIR/src"

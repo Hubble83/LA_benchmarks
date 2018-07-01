@@ -8,4 +8,4 @@ Please edit predefined variables in the top of the *test_all.sh* script to fit t
 
 Since the installation, configuration, and test take several hours, we advise testing a simple dataset first.
 
-Please contact **a71874@alunos.uminho.pt** in case you need help.
+Please contact **joao.m.afonso@inesctec.pt** in case you need help.

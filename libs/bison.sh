@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 # Download and install Bison
 mkdir -p "$BISON_DIR/src"
